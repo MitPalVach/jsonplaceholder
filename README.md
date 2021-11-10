@@ -1,46 +1,63 @@
-# Getting Started with Create React App
+_
+    Создание store.ts  
+1. инициализация/создание стора. первый параметр редюсер, второй миделвейр (createStore)
+2. создание рутового редюсера из всех редюсеров приложения (rootReducer = combineReducers({}))
+    Создание userReducer.ts
+3. редюсер принимает стейт и экшен
+4. конструкция, которая в зависимости от экшена будет вызывать тот или иной кейс (switch (action.type)) 
+5. инициализационное значение стейта, которое будет в этом редюсере
+    5.1 пустой массив пользователей
+    5.2 флаг говорящий идет загрузка или нет
+    5.3 поле содержит строку об ошибке или null
+6. ставим тип стейту в userReducer и этот же тип редюсер должен вернуть
+    Создание userTypes.ts
+7. типизация инициализационного стейта
+8. типы экшенов записаны в константы (enum)
+9. типизация каждого экшена (type, payload?)
+10. объединение типизации всех экшенов
+    userReducer.ts
+11. ставим типизацию для экшенов
+12. создание кейса (type, payload?)
+13. в кейсе возвращаем измененный стейт в зависимости от типа экшена (return {loading: true, error: null, users: []})
+14. если ни один редюсер не отработал, то возвращается не измененный стейт
+    store.ts
+15. устанавливаем редюсер в список rootReducer
+16. типизация rootReducer (type RootState = ReturnType<typeof rootReducer>)
+    index.tsx
+17. прокидывание стора в компонент App с оборачивая его Provider'ом (<Provider store={store}>)
+    Создание useTypedSelector.ts
+18. создание кастомного хука со встроенной типизацией rootReducer (useTypedSelector: TypedUseSelectorHook<RootState> = useSelector)
+    Создание UserList.tsx
+19. выдергивание состояния из стора кастомным useSelector (const {users, loading, error} = useTypedSelector(state => state.user))
+    Создание user.ts (action creators)
+20. создаем функция получение юзеров (thunk creator)
+21. внутри создаем функцию делающую запрос на сервер (thunk) (return async (dispatch: Dispatch<UserAction>) => {})
+22. оборачиваем код в try/catch для отлова ошибок
+23. диспатч экшена FETCH_USERS
+24. если возникла ошибка то диспатч FETCH_USERS_ERROR, где payload строка
+25. делается запрос на сервер за получением пользователей (const response = await axios.get('https:...'))
+26. внутри диспатчим экшен где payload'ом будет то, что пришло в теле ответа от сервера
+    UserList.tsx
+27. вызов useEffect, с пустыми зависимостями (useEffect(() => {},[]))
+28. внутри диспатчим вызов actionCreator'а, чтобы сделать запрос на сервер
+29. если loading===true, то надпись "Идет загрузка..."
+30. если вышла ошибка, то выводится ошибка
+31. после того как пользователи подгрузились и не вылезла ошибка, то users.map
+32. отрисовывается имя каждого юзера (помнить про key)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
 
-In the project directory, you can run:
 
-### `yarn start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
 
-### `yarn test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `yarn build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `yarn eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).

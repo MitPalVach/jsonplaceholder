@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import {Provider} from "react-redux"; // прокидывание стора в компонент App с помощью Provider
+import {Provider} from "react-redux"; // 17. прокидывание стора в компонент App с помощью Provider
 import {store} from "./store/store";
 
 
